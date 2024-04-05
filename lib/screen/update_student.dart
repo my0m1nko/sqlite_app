@@ -2,22 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:sqlite_app/database/database_helper.dart';
 import 'package:sqlite_app/model/student.dart';
 
-class AddStudent extends StatefulWidget {
-  const AddStudent({super.key});
+class UpdateStudent extends StatefulWidget {
+  const UpdateStudent({super.key, this.name, this.email, this.phone, this.address, this.id});
+  final String? name, email, phone, address;
+  final int? id;
 
   @override
-  State<AddStudent> createState() => _AddStudentState();
+  State<UpdateStudent> createState() => _UpdateStudentState();
 }
 
-class _AddStudentState extends State<AddStudent> {
+class _UpdateStudentState extends State<UpdateStudent> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? name, email, phone, address;
+  int? id;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    name = widget.name;
+    email = widget.email;
+    phone = widget.phone;
+    address = widget.address;
+    id = widget.id;
+
+    
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Student'),
+        title: const Text('Update Student'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -26,6 +43,7 @@ class _AddStudentState extends State<AddStudent> {
           child: Column(
             children: [
               TextFormField(
+                initialValue: name,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Name is required';
@@ -35,10 +53,11 @@ class _AddStudentState extends State<AddStudent> {
                 onSaved: (newValue) => name = newValue,
                 decoration: const InputDecoration(
                     prefix: Icon(Icons.person),
-                    labelText: 'Name',
+                    // labelText: 'Name',
                     hintText: 'Enter Name'),
               ),
               TextFormField(
+                initialValue: email,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Email is required';
@@ -48,11 +67,12 @@ class _AddStudentState extends State<AddStudent> {
                 onSaved: (newValue) => email = newValue,
                 decoration: const InputDecoration(
                   prefix: Icon(Icons.email),
-                  labelText: 'Email',
+                  // labelText: 'Email',
                   hintText: 'Enter Email',
                 ),
               ),
               TextFormField(
+                initialValue: phone,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Phone is required';
@@ -62,10 +82,11 @@ class _AddStudentState extends State<AddStudent> {
                 onSaved: (newValue) => phone = newValue,
                 decoration: const InputDecoration(
                     prefix: Icon(Icons.phone),
-                    labelText: 'Phone',
+                    // labelText: 'Phone',
                     hintText: 'Enter Phone'),
               ),
               TextFormField(
+                initialValue: address,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Address is required';
@@ -75,7 +96,7 @@ class _AddStudentState extends State<AddStudent> {
                 onSaved: (newValue) => address = newValue,
                 decoration: const InputDecoration(
                     prefix: Icon(Icons.location_city),
-                    labelText: 'Address',
+                    // labelText: 'Address',
                     hintText: 'Enter Address'),
               ),
               const SizedBox(
@@ -86,17 +107,18 @@ class _AddStudentState extends State<AddStudent> {
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    await DatabaseHelper().insertStudent(
+                   int res = await DatabaseHelper().updateStudent(
                         Student.insertStudent(
                             name: name ?? '',
-                            email: email ?? '' ,
+                            email: email ?? '',
                             phone: phone ?? '',
-                            address: address ?? ''));
-                  
+                            address: address ?? ''),id!
+                            );
                     Navigator.pop(context, 'success');
+
                   }
                 },
-                child: const Text('Add Student'),
+                child: const Text('Update Student'),
               )
             ],
           ),

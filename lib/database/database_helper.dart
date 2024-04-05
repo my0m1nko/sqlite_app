@@ -19,7 +19,7 @@ class DatabaseHelper{
 
     _database = await openDatabase(path);
 
-    await _database.execute('CREATE TABLE IF NOT EXISTS $tableName (id INTEGER PRIMARY KEY, name TEXT, address TEXT, phone TEXT)');
+    await _database.execute('CREATE TABLE IF NOT EXISTS $tableName (id INTEGER PRIMARY KEY, name TEXT,email TEXT, address TEXT, phone TEXT)');
 
     return _database;
   }
@@ -33,7 +33,7 @@ class DatabaseHelper{
  Future<List<Map<String,dynamic>>> getAllStudents() async{
     _database = await _createDatabase();
     // _database.rawQuery('SELECT * FROM $tableName');
-    return await _database.query(tableName,columns: ['id','name','address','phone']);
+    return await _database.query(tableName,columns: ['id','name','email','address','phone']);
   }
 
 
